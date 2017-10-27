@@ -9,5 +9,4 @@ public interface KidRepository extends MongoRepository<Child, String> {
     List<Child> findByName(String name);
     List<Child> findByAge(int age);
     Child findById(String id);
-
 }
