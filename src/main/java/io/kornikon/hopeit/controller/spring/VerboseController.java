@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -19,7 +20,7 @@ class VerboseController {
 
     private final RequestMappingHandlerMapping requestMappingHandlerMapping;
 
-    @RequestMapping("/beanlist")
+    @RequestMapping(path = "/beanlist", name = "List all beans")
     public List<String> loadedBeansDump() {
         String[] beanNames = context.getBeanDefinitionNames();
         Arrays.sort(beanNames);
@@ -27,10 +28,11 @@ class VerboseController {
     }
 
 
-    @RequestMapping("/")
+    @RequestMapping(path = "/", name = "List all REST mappings")
     public String getEndPointsInView(Model model) {
         return requestMappingHandlerMapping.getHandlerMethods().keySet().stream().map(rmi -> {
             return "<pre>"
+                    + addEndpoint("    name: ", rmi.getName())
                     + addEndpoint("    path: ", rmi.getPatternsCondition())
                     + addEndpoint("  method: ", rmi.getMethodsCondition())
                     + "</pre>";
@@ -38,8 +40,8 @@ class VerboseController {
     }
 
     private String addEndpoint(String s, Object o) {
-        String str = o.toString();
-        if (str.length() > 1) {
+        String str = Objects.toString(o, "");
+        if (str.startsWith("[") && str.endsWith("]")) {
             str = str.substring(1, str.length() - 1);
         }
         return s + str + "<br>";

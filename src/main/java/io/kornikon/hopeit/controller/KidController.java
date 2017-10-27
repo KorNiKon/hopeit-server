@@ -15,22 +15,22 @@ class KidController {
 
     private final KidRepository repository;
 
-    @RequestMapping
+    @RequestMapping(name ="List all Child records")
     public List<Child> children() {
         return repository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, name="Save Child record")
     public Child save(@RequestBody Child child) {
         return repository.save(child);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE, name="Delete Child record")
     public void delete(@RequestParam String id) {
         repository.delete(id);
     }
 
-    @RequestMapping("/{id}")
+    @RequestMapping(path = "/{id}", name="Get Child by {id}")
     public Child customer(@PathVariable String id) {
         return repository.findById(id);
     }
