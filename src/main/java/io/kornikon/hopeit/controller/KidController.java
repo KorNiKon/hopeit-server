@@ -4,9 +4,7 @@ package io.kornikon.hopeit.controller;
 import io.kornikon.hopeit.model.Child;
 import io.kornikon.hopeit.repository.KidRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,16 +20,19 @@ class KidController {
         return repository.findAll();
     }
 
-    @RequestMapping(value = "/{id}")
+    @RequestMapping(method = RequestMethod.POST)
+    public Child save(@RequestBody Child child) {
+        return repository.save(child);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void delete(@RequestParam String id) {
+        repository.delete(id);
+    }
+
+    @RequestMapping("/{id}")
     public Child customer(@PathVariable String id) {
         return repository.findById(id);
     }
-
-//    @RequestMapping(value = "/query")
-//    public List<Child> query(
-//            @RequestParam(required = false) String firstName,
-//            @RequestParam(required = false) String lastName) {
-//        return repository.findByFirstNameOrLastName(firstName, lastName);
-//    }
 
 }

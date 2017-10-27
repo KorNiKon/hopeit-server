@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Calendar;
 
 @Configuration
 class MongoConfig extends AbstractMongoConfiguration {
@@ -39,6 +40,9 @@ class MongoConfig extends AbstractMongoConfiguration {
             repository.deleteAll();
             repository.save(Child.builder().name("Alice").build());
             repository.save(Child.builder().name("Bob").build());
+            repository.save(new Child(null, "Full Data", 19999, "Great desc.",
+                    new BigDecimal("99999.99"), new BigDecimal("0.00"), "MyCat",
+                    Calendar.getInstance(), true));
         };
     }
 
