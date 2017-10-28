@@ -62,10 +62,10 @@ class MongoConfig extends AbstractMongoConfiguration {
             GridFSInputFile f2 = saveFile(dbFiles, "src/main/resources/img/Bob.png", "Bob");
             GridFSInputFile f3 = saveFile(dbFiles, "src/main/resources/img/Alicja.png", "Alicja");
             GridFSInputFile f4 = saveFile(dbFiles, "src/main/resources/img/fulldata.png", "fulldata");
-            GridFSInputFile f5 = saveFile(dbFiles, "src/main/resources/img/stock_image2.png", "img_stock2");
-            GridFSInputFile f6 = saveFile(dbFiles, "src/main/resources/img/Bob2.png", "Bob2");
-            GridFSInputFile f7 = saveFile(dbFiles, "src/main/resources/img/Alicja2.png", "Alicja2");
-            GridFSInputFile f8 = saveFile(dbFiles, "src/main/resources/img/fulldata2.png", "fulldata2");
+            GridFSInputFile f5 = saveFile(dbFiles, "src/main/resources/img/stock_image.png", "img_stock2");
+            GridFSInputFile f6 = saveFile(dbFiles, "src/main/resources/img/Bob.png", "Bob2");
+            GridFSInputFile f7 = saveFile(dbFiles, "src/main/resources/img/Alicja.png", "Alicja2");
+            GridFSInputFile f8 = saveFile(dbFiles, "src/main/resources/img/fulldata.png", "fulldata2");
 
 
             Kid alice = kidRepository.save(Kid.builder().name("Alicja")
