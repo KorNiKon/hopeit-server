@@ -27,18 +27,7 @@ class MessageController {
 
     @RequestMapping(path="messages", method = RequestMethod.POST, name = "Save Message record")
     public Message save(@RequestBody Message message) {
-//        if (!message.getAttachments().isEmpty()) {
-//            message.getAttachments().forEach((photoName, bytecode) -> {
-//                if (photoName == null) {
-//                    return;
-//                }
-//                GridFS photo = new GridFS(mongoTemplate.getDb());
-//                GridFSInputFile gfsFile = photo.createFile(photoName);
-//                gfsFile.setFilename(photoName);
-//                gfsFile.save();
-//                message.getAttachmentsIds().add(photoName);
-//            });
-//        }
+        message.setDateSent(Calendar.getInstance());
 
         return repository.save(message);
     }
@@ -55,6 +44,7 @@ class MessageController {
 
     @RequestMapping(path="notifications", method = RequestMethod.POST, name = "Save Notification record")
     public Message saveNotifications(@RequestBody Message message) {
+        message.setDateSent(null);
         return repository.save(message);
     }
 
