@@ -34,7 +34,14 @@ class AndroidUserController {
 
     @RequestMapping(path = "/{idOrName}", name="Get AndroidUser by {idOrName}")
     public AndroidUser customer(@PathVariable String idOrName) {
-        return repository.findByIdOrName(idOrName);
+        AndroidUser user = repository.findById(idOrName);
+        if (user == null) {
+            List<AndroidUser> users = repository.findByName(idOrName);
+            if(!users.isEmpty()) {
+                user = users.get(0);
+            }
+        }
+        return user;
     }
 
 }
