@@ -54,22 +54,36 @@ class MongoConfig extends AbstractMongoConfiguration {
             kidRepository.deleteAll();
             donationRepository.deleteAll();
             androidUserRepository.deleteAll();
+            messageRepository.deleteAll();
 
-            String newFileName = "src/main/resources/img/stock_image.png";
-            File imageFile = new File(newFileName);
-            GridFS dbFiles = new GridFS(mongoTemplate().getDb());
-            GridFSInputFile gfsFile = dbFiles.createFile(imageFile);
-            gfsFile.setFilename("img_stock");
-            gfsFile.save();
+            saveFile("src/main/resources/img/stock_image.png");
 
 
             Kid alice = kidRepository.save(Kid.builder().name("Alice").desc("lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
                     + "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
                     + "lorem ipsum lorem ipsum ").build());
             Donation don = donationRepository.save(new Donation(null,alice,BigDecimal.ONE));
-            Message message = messageRepository.save(new Message(null,"First message", "fdsafkjh dshfhhfh hu hu hu !",false));
-            Message message2 = messageRepository.save(new Message(null,"Second message", "2. fdsafkjh dshfhhfh hu hu hu !",false));
-            Message message3 = messageRepository.save(new Message(null,"Third message", "??? fdsafkjh dshfhhfh hu hu hu !",false));
+
+            Calendar dateSent = Calendar.getInstance();
+
+            Message message = messageRepository.save(Message.builder()
+                    .title("First message")
+                    .content("fdsafkjh dshfhhfh hu hu hu !")
+                    .dateSent(dateSent)
+                    .build());
+            Calendar dateSent2 = Calendar.getInstance();
+            dateSent2.add(Calendar.MONTH, -2);
+            Message message2 = messageRepository.save(Message.builder()
+                    .title("Second message")
+                    .content("2. fdsafkjh dshfhhfh hu hu hu !")
+                    .dateSent(dateSent2)
+                    .build());
+            Calendar dateSent3 = Calendar.getInstance();
+            dateSent2.add(Calendar.DAY_OF_MONTH, -1);
+            Message message3 = messageRepository.save(Message.builder()
+                    .title("Third message").content("??? fdsafkjh dshfhhfh hu hu hu !")
+                    .dateSent(dateSent3)
+                    .build());
 
             androidUserRepository.save(AndroidUser.builder().name("user1").donations(Arrays.asList(don)).messages(Arrays.asList(message, message2, message3)).build());
 
@@ -80,6 +94,14 @@ class MongoConfig extends AbstractMongoConfiguration {
                     Calendar.getInstance(), true));
 
         };
+    }
+
+    private void saveFile(String newFileName) throws Exception {
+        File imageFile = new File(newFileName);
+        GridFS dbFiles = new GridFS(mongoTemplate().getDb());
+        GridFSInputFile gfsFile = dbFiles.createFile(imageFile);
+        gfsFile.setFilename("img_stock");
+        gfsFile.save();
     }
 
     @Override
