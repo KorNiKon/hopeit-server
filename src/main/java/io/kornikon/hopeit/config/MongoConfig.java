@@ -62,12 +62,15 @@ class MongoConfig extends AbstractMongoConfiguration {
             GridFSInputFile f2 = saveFile(dbFiles, "src/main/resources/img/Bob.png", "Bob");
             GridFSInputFile f3 = saveFile(dbFiles, "src/main/resources/img/Alicja.png", "Alicja");
             GridFSInputFile f4 = saveFile(dbFiles, "src/main/resources/img/fulldata.png", "fulldata");
+            GridFSInputFile f5 = saveFile(dbFiles, "src/main/resources/img/stock_image2.png", "img_stock2");
+            GridFSInputFile f6 = saveFile(dbFiles, "src/main/resources/img/Bob2.png", "Bob2");
+            GridFSInputFile f7 = saveFile(dbFiles, "src/main/resources/img/Alicja2.png", "Alicja2");
+            GridFSInputFile f8 = saveFile(dbFiles, "src/main/resources/img/fulldata2.png", "fulldata2");
 
 
             Kid alice = kidRepository.save(Kid.builder().name("Alicja")
-                    .desc("lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
-                    + "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
-                    + "lorem ipsum lorem ipsum ")
+                    .desc("Przyjmuje chemię od 6 miesięcy.")
+                    .age(5)
                     .cashNow(new BigDecimal(3452))
                     .cashTarget(new BigDecimal(40000))
                     .photoId(f3.getFilename())
@@ -100,28 +103,60 @@ class MongoConfig extends AbstractMongoConfiguration {
 
             Message notification1 = messageRepository.save(Message.builder()
                     .title("Notify user").content("1??? fdsafkjh dshfhhfh hu hu hu !")
+                    .dateSent(dateSent3)
                     .build());
 
             Message notification2 = messageRepository.save(Message.builder()
                     .title("Notify user").content("2??? fdsafkjh dshfhhfh hu hu hu !")
+                    .dateSent(dateSent3)
                     .build());
 
             Message notification3 = messageRepository.save(Message.builder()
                     .title("Notify user").content("3??? fdsafkjh dshfhhfh hu hu hu !")
+                    .dateSent(dateSent3)
                     .build());
 
             androidUserRepository.save(AndroidUser.builder().name("user1").donations(Arrays.asList(don)).messages(Arrays.asList(message, message2, message3)).build());
 
 
-            kidRepository.save(Kid.builder().name("Bob")
+            kidRepository.save(Kid.builder().name("Krzysiu")
                     .age(3)
                     .cashNow(new BigDecimal(874))
                     .cashTarget(new BigDecimal(6000))
                     .photoId(f2.getFilename())
                     .build());
-            kidRepository.save(new Kid(null, "Full Data", f1.getFilename(), null, 19999, "Great desc.",
+            kidRepository.save(new Kid(null, "Sławek", f1.getFilename(), null, 7, "Czeka go bardzo poważna i kosztowna operacja",
                     new BigDecimal("99999"), new BigDecimal("45000"), "MyCat",
                     Calendar.getInstance(), true));
+
+            kidRepository.save(Kid.builder().name("Maciek")
+                    .age(4)
+                    .cashNow(new BigDecimal(874))
+                    .cashTarget(new BigDecimal(6000))
+                    .photoId(f6.getFilename())
+                    .build());
+
+            kidRepository.save(Kid.builder().name("Magda")
+                    .age(1)
+                    .desc("Ma dopiero rok")
+                    .cashNow(new BigDecimal(744))
+                    .cashTarget(new BigDecimal(5468))
+                    .photoId(f5.getFilename())
+                    .build());
+
+            kidRepository.save(Kid.builder().name("Patryk")
+                    .age(3)
+                    .cashNow(new BigDecimal(874))
+                    .cashTarget(new BigDecimal(4579))
+                    .photoId(f7.getFilename())
+                    .build());
+
+            kidRepository.save(Kid.builder().name("Bartek")
+                    .age(7)
+                    .cashNow(new BigDecimal(874))
+                    .cashTarget(new BigDecimal(4579))
+                    .photoId(f8.getFilename())
+                    .build());
 
         };
     }
