@@ -5,9 +5,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -30,7 +32,14 @@ class VerboseController {
 
     @RequestMapping(path = "/", name = "List all REST mappings")
     public String getEndPointsInView(Model model) {
-        return requestMappingHandlerMapping.getHandlerMethods().keySet().stream().map(rmi -> {
+        return requestMappingHandlerMapping.getHandlerMethods().keySet().stream()
+                .sorted(new Comparator<RequestMappingInfo>() {
+                    @Override
+                    public int compare(RequestMappingInfo o1, RequestMappingInfo o2) {
+                        return o1.getPatternsCondition().toString().compareTo(o2.getPatternsCondition().toString());
+                    }
+                })
+                .map(rmi -> {
             return "<pre>"
                     + addEndpoint("    name: ", rmi.getName())
                     + addEndpoint("    path: ", rmi.getPatternsCondition())

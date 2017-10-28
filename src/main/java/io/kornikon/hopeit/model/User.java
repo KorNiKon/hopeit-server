@@ -1,6 +1,9 @@
 package io.kornikon.hopeit.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,16 +16,11 @@ import java.util.Calendar;
 @Builder
 @ToString
 @Document
-public class Child {
+public class User {
     @Id
     private String id;
 
     private String name;
-    private int age;
-    private String desc;
-    private BigDecimal cashTarget;
-    private BigDecimal cashNow;
-    private String category;
-    private Calendar deadline;
-    private boolean lastChance;
+    private String role;
+    private String password;
 }
