@@ -1,9 +1,6 @@
 package io.kornikon.hopeit.config;
 
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
+import com.mongodb.*;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSFile;
 import com.mongodb.gridfs.GridFSInputFile;
@@ -50,18 +47,20 @@ class MongoConfig extends AbstractMongoConfiguration {
     public CommandLineRunner dataLoader(KidRepository kidRepository, DonationRepository donationRepository, AndroidUserRepository androidUserRepository) {
         return args -> {
             kidRepository.deleteAll();
+            donationRepository.deleteAll();
+            androidUserRepository.deleteAll();
+
             String newFileName = "src/main/resources/img/stock_image.png";
             File imageFile = new File(newFileName);
-            GridFS photo = new GridFS(mongoTemplate().getDb());
-            GridFSInputFile gfsFile = photo.createFile(imageFile);
+            GridFS dbFiles = new GridFS(mongoTemplate().getDb());
+            DBCursor cursor = dbFiles.getFileList();
+
+            GridFSInputFile gfsFile = dbFiles.createFile(imageFile);
             gfsFile.setFilename("img_stock");
             gfsFile.save();
 
 
             Kid alice = kidRepository.save(Kid.builder().name("Alice").desc("lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
-                    + "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
-                    + "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
-                    + "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
                     + "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
                     + "lorem ipsum lorem ipsum ").build());
             Donation don = donationRepository.save(new Donation(null,alice,BigDecimal.ONE));
