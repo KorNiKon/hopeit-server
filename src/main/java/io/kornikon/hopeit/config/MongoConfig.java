@@ -59,9 +59,9 @@ class MongoConfig extends AbstractMongoConfiguration {
             GridFS dbFiles = new GridFS(mongoTemplate().getDb());
 
             GridFSInputFile f1 = saveFile(dbFiles, "src/main/resources/img/stock_image.png", "img_stock");
-            GridFSInputFile f2 = saveFile(dbFiles, "src/main/resources/img/heart.png", "heart");
-            GridFSInputFile f3 = saveFile(dbFiles, "src/main/resources/img/ic_launcher.png", "ic_launcher");
-            GridFSInputFile f4 = saveFile(dbFiles, "src/main/resources/img/ic_launcher_foreground.png", "ic_launcher_foreground");
+            GridFSInputFile f2 = saveFile(dbFiles, "src/main/resources/img/Bob.png", "Bob");
+            GridFSInputFile f3 = saveFile(dbFiles, "src/main/resources/img/Alicja.png", "Alicja");
+            GridFSInputFile f4 = saveFile(dbFiles, "src/main/resources/img/fulldata.png", "fulldata");
 
 
             Kid alice = kidRepository.save(Kid.builder().name("Alicja")
@@ -96,6 +96,18 @@ class MongoConfig extends AbstractMongoConfiguration {
             Message message3 = messageRepository.save(Message.builder()
                     .title("Third message").content("??? fdsafkjh dshfhhfh hu hu hu !")
                     .dateSent(dateSent3)
+                    .build());
+
+            Message notification1 = messageRepository.save(Message.builder()
+                    .title("Notify user").content("1??? fdsafkjh dshfhhfh hu hu hu !")
+                    .build());
+
+            Message notification2 = messageRepository.save(Message.builder()
+                    .title("Notify user").content("2??? fdsafkjh dshfhhfh hu hu hu !")
+                    .build());
+
+            Message notification3 = messageRepository.save(Message.builder()
+                    .title("Notify user").content("3??? fdsafkjh dshfhhfh hu hu hu !")
                     .build());
 
             androidUserRepository.save(AndroidUser.builder().name("user1").donations(Arrays.asList(don)).messages(Arrays.asList(message, message2, message3)).build());
