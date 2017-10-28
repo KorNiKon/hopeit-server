@@ -7,9 +7,11 @@ import com.mongodb.gridfs.GridFSInputFile;
 import io.kornikon.hopeit.model.AndroidUser;
 import io.kornikon.hopeit.model.Donation;
 import io.kornikon.hopeit.model.Kid;
+import io.kornikon.hopeit.model.Message;
 import io.kornikon.hopeit.repository.AndroidUserRepository;
 import io.kornikon.hopeit.repository.DonationRepository;
 import io.kornikon.hopeit.repository.KidRepository;
+import io.kornikon.hopeit.repository.MessageRepository;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +46,10 @@ class MongoConfig extends AbstractMongoConfiguration {
     private int port;
 
     @Bean
-    public CommandLineRunner dataLoader(KidRepository kidRepository, DonationRepository donationRepository, AndroidUserRepository androidUserRepository) {
+    public CommandLineRunner dataLoader(KidRepository kidRepository,
+                                        DonationRepository donationRepository,
+                                        AndroidUserRepository androidUserRepository,
+                                        MessageRepository messageRepository) {
         return args -> {
             kidRepository.deleteAll();
             donationRepository.deleteAll();
@@ -62,8 +67,12 @@ class MongoConfig extends AbstractMongoConfiguration {
                     + "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
                     + "lorem ipsum lorem ipsum ").build());
             Donation don = donationRepository.save(new Donation(null,alice,BigDecimal.ONE));
+            Message message = messageRepository.save(new Message(null,"First message", "fdsafkjh dshfhhfh hu hu hu !",false));
+            Message message2 = messageRepository.save(new Message(null,"Second message", "2. fdsafkjh dshfhhfh hu hu hu !",false));
+            Message message3 = messageRepository.save(new Message(null,"Third message", "??? fdsafkjh dshfhhfh hu hu hu !",false));
 
-            androidUserRepository.save(AndroidUser.builder().name("user1").donations(Arrays.asList(don)).build());
+            androidUserRepository.save(AndroidUser.builder().name("user1").donations(Arrays.asList(don)).messages(Arrays.asList(message, message2, message3)).build());
+
 
             kidRepository.save(Kid.builder().name("Bob").build());
             kidRepository.save(new Kid(null, "Full Data", "img_stock",null, 19999, "Great desc.",
