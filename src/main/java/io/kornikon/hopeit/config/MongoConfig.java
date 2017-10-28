@@ -1,8 +1,10 @@
 package io.kornikon.hopeit.config;
 
-import com.mongodb.*;
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.gridfs.GridFS;
-import com.mongodb.gridfs.GridFSFile;
 import com.mongodb.gridfs.GridFSInputFile;
 import io.kornikon.hopeit.model.AndroidUser;
 import io.kornikon.hopeit.model.Donation;
@@ -12,20 +14,18 @@ import io.kornikon.hopeit.repository.AndroidUserRepository;
 import io.kornikon.hopeit.repository.DonationRepository;
 import io.kornikon.hopeit.repository.KidRepository;
 import io.kornikon.hopeit.repository.MessageRepository;
-import org.apache.commons.io.IOUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 class MongoConfig extends AbstractMongoConfiguration {
@@ -56,13 +56,23 @@ class MongoConfig extends AbstractMongoConfiguration {
             androidUserRepository.deleteAll();
             messageRepository.deleteAll();
 
-            saveFile("src/main/resources/img/stock_image.png");
+            GridFS dbFiles = new GridFS(mongoTemplate().getDb());
+
+            GridFSInputFile f1 = saveFile(dbFiles, "src/main/resources/img/stock_image.png", "img_stock");
+            GridFSInputFile f2 = saveFile(dbFiles, "src/main/resources/img/heart.png", "heart");
+            GridFSInputFile f3 = saveFile(dbFiles, "src/main/resources/img/ic_launcher.png", "ic_launcher");
+            GridFSInputFile f4 = saveFile(dbFiles, "src/main/resources/img/ic_launcher_foreground.png", "ic_launcher_foreground");
 
 
-            Kid alice = kidRepository.save(Kid.builder().name("Alice").desc("lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
+            Kid alice = kidRepository.save(Kid.builder().name("Alicja")
+                    .desc("lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
                     + "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "
-                    + "lorem ipsum lorem ipsum ").build());
-            Donation don = donationRepository.save(new Donation(null,alice,BigDecimal.ONE));
+                    + "lorem ipsum lorem ipsum ")
+                    .cashNow(new BigDecimal(3452))
+                    .cashTarget(new BigDecimal(40000))
+                    .photoId(f3.getFilename())
+                    .build());
+            Donation don = donationRepository.save(new Donation(null, alice, new BigDecimal(6258)));
 
             Calendar dateSent = Calendar.getInstance();
 
@@ -71,15 +81,18 @@ class MongoConfig extends AbstractMongoConfiguration {
                     .content("fdsafkjh dshfhhfh hu hu hu !")
                     .dateSent(dateSent)
                     .build());
+
             Calendar dateSent2 = Calendar.getInstance();
             dateSent2.add(Calendar.MONTH, -2);
             Message message2 = messageRepository.save(Message.builder()
                     .title("Second message")
                     .content("2. fdsafkjh dshfhhfh hu hu hu !")
                     .dateSent(dateSent2)
+                    .attachmentsIds(Arrays.asList(f4.getFilename(), f3.getFilename()))
                     .build());
+
             Calendar dateSent3 = Calendar.getInstance();
-            dateSent2.add(Calendar.DAY_OF_MONTH, -1);
+            dateSent3.add(Calendar.DAY_OF_MONTH, -1);
             Message message3 = messageRepository.save(Message.builder()
                     .title("Third message").content("??? fdsafkjh dshfhhfh hu hu hu !")
                     .dateSent(dateSent3)
@@ -88,20 +101,25 @@ class MongoConfig extends AbstractMongoConfiguration {
             androidUserRepository.save(AndroidUser.builder().name("user1").donations(Arrays.asList(don)).messages(Arrays.asList(message, message2, message3)).build());
 
 
-            kidRepository.save(Kid.builder().name("Bob").build());
-            kidRepository.save(new Kid(null, "Full Data", "img_stock",null, 19999, "Great desc.",
-                    new BigDecimal("99999.99"), new BigDecimal("0.00"), "MyCat",
+            kidRepository.save(Kid.builder().name("Bob")
+                    .age(3)
+                    .cashNow(new BigDecimal(874))
+                    .cashTarget(new BigDecimal(6000))
+                    .photoId(f2.getFilename())
+                    .build());
+            kidRepository.save(new Kid(null, "Full Data", f1.getFilename(), null, 19999, "Great desc.",
+                    new BigDecimal("99999"), new BigDecimal("45000"), "MyCat",
                     Calendar.getInstance(), true));
 
         };
     }
 
-    private void saveFile(String newFileName) throws Exception {
+    private GridFSInputFile saveFile(GridFS dbFiles, String newFileName, String name) throws Exception {
         File imageFile = new File(newFileName);
-        GridFS dbFiles = new GridFS(mongoTemplate().getDb());
         GridFSInputFile gfsFile = dbFiles.createFile(imageFile);
-        gfsFile.setFilename("img_stock");
+        gfsFile.setFilename(name);
         gfsFile.save();
+        return gfsFile;
     }
 
     @Override

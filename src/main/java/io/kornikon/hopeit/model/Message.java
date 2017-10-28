@@ -28,7 +28,7 @@ public class Message {
 
     private Calendar dateSent;
 
-    Map<String, String> attachmentsIds;
+    List<String> attachmentsIds;
     Map<String, byte[]> attachments;
 
 }
