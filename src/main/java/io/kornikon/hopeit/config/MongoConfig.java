@@ -53,8 +53,6 @@ class MongoConfig extends AbstractMongoConfiguration {
             String newFileName = "src/main/resources/img/stock_image.png";
             File imageFile = new File(newFileName);
             GridFS dbFiles = new GridFS(mongoTemplate().getDb());
-            DBCursor cursor = dbFiles.getFileList();
-
             GridFSInputFile gfsFile = dbFiles.createFile(imageFile);
             gfsFile.setFilename("img_stock");
             gfsFile.save();

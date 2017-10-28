@@ -32,9 +32,9 @@ class AndroidUserController {
         repository.delete(id);
     }
 
-    @RequestMapping(path = "/{id}", name="Get AndroidUser by {id}")
-    public AndroidUser customer(@PathVariable String id) {
-        return repository.findById(id);
+    @RequestMapping(path = "/{idOrName}", name="Get AndroidUser by {idOrName}")
+    public AndroidUser customer(@PathVariable String idOrName) {
+        return repository.findByIdOrName(idOrName);
     }
 
 }

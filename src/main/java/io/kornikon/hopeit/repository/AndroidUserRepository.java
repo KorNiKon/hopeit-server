@@ -10,4 +10,5 @@ public interface AndroidUserRepository extends MongoRepository<AndroidUser, Stri
     List<AndroidUser> findByName(String name);
     List<AndroidUser> findByEmail(String email);
     AndroidUser findById(String id);
+    AndroidUser findByIdOrName(String idOrName);
 }
